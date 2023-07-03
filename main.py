@@ -56,8 +56,8 @@ for i in range(args.bandit_number):
 for i in range(args.rounds):
     # Train each bandit for one agg round
     for j in range(args.bandit_number):
-        bandits[j].train(bandits[i].x_train, bandits[j].y_train, local_epochs_per_round)
-        bandits[j].evaluate(bandits[i].x_test, bandits[j].y_test, True, f"train_round_{i}")
+        bandits[j].train(bandits[j].x_train, bandits[j].y_train, local_epochs_per_round)
+        bandits[j].evaluate(bandits[j].x_test, bandits[j].y_test, True, f"train_round_{i}")
         bandits[j].sample_ticket_allocation()
         print("Bandit ", j, " finished training for round ", i)
         sys.stdout.flush()
@@ -93,3 +93,6 @@ for i in range(args.bandit_number):
         
     with open(args.dirname + "/relationships"+ str(i) + ".txt", "wb") as f:
         pickle.dump(bandits[i].get_relationship_history(), f)
+
+    with open(args.dirname + "/accuracy"+ str(i) + ".txt", "wb") as f:
+        pickle.dump(bandits[i].get_accuracy_history(), f)

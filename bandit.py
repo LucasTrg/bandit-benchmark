@@ -13,6 +13,7 @@ class Bandit(object):
         self.ticket_allocation = {}
         self.relationships = {}
         self.loss_history = []
+        self.accuracy_history = []
         self.relationship_history = []
 
         self.x_train = x_train
@@ -51,10 +52,11 @@ class Bandit(object):
     def update_relationships(self, other):
         self.relationships[other.bandit_id] = self.relationships.get(other.bandit_id, 0)*np.exp(self.eta*self.utility(other, self.ticket_allocation[other.bandit_id]))
 
-    def evaluate(self, x_test, y_test, write_to_history=False, type='train'):
+    def evaluate(self, x_test, y_test, write_to_history=False, step='train'):
         if write_to_history:
             loss = self.model.evaluate(x_test, y_test)
-            self.loss_history.append((type,loss[0]))
+            self.loss_history.append((step,loss[0]))
+            self.accuracy_history.append((step,loss[1]))
             return loss
         return self.model.evaluate(x_test, y_test)
 
@@ -66,6 +68,9 @@ class Bandit(object):
 
     def get_relationship_history(self):
         return self.relationship_history
+
+    def get_accuracy_history(self):
+        return self.accuracy_history
 
     def get_ticket_allocation(self):
         return self.ticket_allocation
