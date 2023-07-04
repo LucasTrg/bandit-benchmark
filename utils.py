@@ -59,20 +59,79 @@ def split_datasets_by_label(x_train, x_test, y_train, y_test, bandit_number, lab
     # Assigns a portion data to each bandit based on their assigned labels such that there is no overlap
     for bandit in range(bandit_number):
         for label in labels_assigned[bandit]:
-            x_train_list[bandit]
-            x_train_sorted[label]
-            weights[label]
-            allocated[label]
-            x_train_list[bandit] += x_train_sorted[label][allocated[label]:int(weights[label]*len(x_train_sorted[label]))+allocated[label]]
-            y_train_list[bandit] += y_train_sorted[label][allocated[label]:int(weights[label]*len(y_train_sorted[label]))+allocated[label]]
-            x_test_list[bandit] += x_test_sorted[label][allocated[label]:int(weights[label]*len(x_test_sorted[label]))+allocated[label]]
-            y_test_list[bandit] += y_test_sorted[label][allocated[label]:int(weights[label]*len(y_test_sorted[label]))+allocated[label]]
+            print(f"""
+            {bandit},
+            {label},
+            {len(x_train_list[bandit])}, 
+            {len(x_train_sorted[label])},
+            {weights[label]},
+            {allocated[label]}""")
+            x_train_list[bandit] += x_train_sorted[label][int(allocated[label]*len(x_train_sorted[label])):int((weights[label]+allocated[label])*len(x_train_sorted[label]))]
+            y_train_list[bandit] += y_train_sorted[label][int(allocated[label]*len(y_train_sorted[label])):int((weights[label]+allocated[label])*len(y_train_sorted[label]))]
+            x_test_list[bandit] += x_test_sorted[label][int(allocated[label]*len(x_test_sorted[label])):int((weights[label]+allocated[label])*len(x_test_sorted[label]))]
+            y_test_list[bandit] += y_test_sorted[label][int(allocated[label]*len(y_test_sorted[label])):int((weights[label]+allocated[label])*len(y_test_sorted[label]))]
 
-            allocated[bandit] += int(weights[label]*len(x_train_sorted[label]))
+            allocated[label] += weights[label]
 
     return np.array([np.array(x) for  x in x_train_list]) , np.array([np.array(y) for  y in y_train_list]), np.array([np.array(x) for  x in x_test_list]), np.array([np.array(y) for  y in y_test_list])
 
+
+def split_datasets_by_label_fixed(x_train, x_test, y_train, y_test, bandit_number, label_assignment):
+    x_train_list = []
+    y_train_list = []
+    x_test_list = []
+    y_test_list = []
+
+    for bandit in range(bandit_number):
+        x_train_list.append([])
+        y_train_list.append([])
+        x_test_list.append([])
+        y_test_list.append([])
+
+    x_train_sorted, y_train_sorted = sort_dataset_per_label(x_train, y_train)
+    x_test_sorted, y_test_sorted = sort_dataset_per_label(x_test, y_test)
+
+    # Computes the portion each bandit should have depending on how many shared labels they have
+    weights = {}
+    for val in label_assignment.values():
+        for label in val:
+            if label in weights:
+                weights[label] += 1
+            else:
+                weights[label] = 1
+
+    for label in weights:
+        weights[label] = 1/weights[label]
+    
+    allocated={}
+    for label in range(10):
+        allocated[label] = 0
+
+
+    # Assigns a portion data to each bandit based on their assigned labels such that there is no overlap
+    for bandit in range(bandit_number):
+        for label in label_assignment[bandit]:
+            print(f"""
+            {bandit},
+            {label},
+            {len(x_train_list[bandit])}, 
+            {len(x_train_sorted[label])},
+            {weights[label]},
+            {allocated[label]}""")
+            x_train_list[bandit] += x_train_sorted[label][int(allocated[label]*len(x_train_sorted[label])):int((weights[label]+allocated[label])*len(x_train_sorted[label]))]
+            y_train_list[bandit] += y_train_sorted[label][int(allocated[label]*len(y_train_sorted[label])):int((weights[label]+allocated[label])*len(y_train_sorted[label]))]
+            x_test_list[bandit] += x_test_sorted[label][int(allocated[label]*len(x_test_sorted[label])):int((weights[label]+allocated[label])*len(x_test_sorted[label]))]
+            y_test_list[bandit] += y_test_sorted[label][int(allocated[label]*len(y_test_sorted[label])):int((weights[label]+allocated[label])*len(y_test_sorted[label]))]
+
+            allocated[label] += weights[label]
+
+    return np.array([np.array(x) for  x in x_train_list]) , np.array([np.array(y) for  y in y_train_list]), np.array([np.array(x) for  x in x_test_list]), np.array([np.array(y) for  y in y_test_list])
+
+
+
+
 #Sorts x and y by the label in y, and produces a dictionnary of each label and the corresponding data
+
 def sort_dataset_per_label(x,y):
     sorted_train = {}
     sorted_test = {}

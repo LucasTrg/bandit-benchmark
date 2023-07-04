@@ -1,6 +1,7 @@
 import tensorflow as tf
 import random as rand
 import numpy as np
+import copy
 
 class Bandit(object):
     
@@ -79,7 +80,7 @@ class Bandit(object):
     def sample_ticket_allocation(self):
         self.ticket_allocation = {}
         self.normalize_relationships()
-        self.relationship_history.append(str(self.relationships))
+        self.relationship_history.append(copy.deepcopy(self.relationships))
         distributed_tickets = 0
         while distributed_tickets < self.ticket_number:
             # uses the relationship weights to randomly distribute a ticket to another bandit
