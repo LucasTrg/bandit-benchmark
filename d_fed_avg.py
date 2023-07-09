@@ -3,7 +3,7 @@ import random as rand
 import numpy as np
 import copy
 
-class Bandit(object):
+class dFedAvg(object):
     
 
     def __init__(self, bandit_id, ticket_number, x_train, y_train, x_test, y_test, gamma =0.15, eta=3, seed=42) -> None:
@@ -38,29 +38,21 @@ class Bandit(object):
         for i in self.relationships:
             self.relationships[i] /= total
 
+    # Relation ship is fixed, so we can just update the weights
+    def update_relationships(self, other):
+        for self_layer, other_layer in zip(self.model.get_layers(), other.model.get_layers()):
+            if hasattr(self_layer, 'get_weights'):
+                weights = zip(self_layer.get_weights(), other_layer.get_weights())
+                updated_weights = [self_weight+1/self.ticket_number*other_weight
+                for self_weight, other_weight in weights] 
+                self_layer.set_weights(updated_weights)
+    
     def scale_model(self):
         for layer in self.model.get_layers():
             if hasattr(layer, 'get_weights'):
                 weights = layer.get_weights()
                 for i in range(len(weights)):
-                    weights[i] *= (1-self.gamma)
-
-
-    def utility(self, other, tickets):
-        score = -  self.model.evaluate(self.x_test, self.y_test)[1]
-        for self_layer, other_layer in zip(self.model.get_layers(), other.model.get_layers()):
-            if hasattr(self_layer, 'get_weights'):
-                weights = zip(self_layer.get_weights(), other_layer.get_weights())
-                updated_weights = [self_weight+self.gamma*tickets/self.ticket_number*other_weight
-                for self_weight, other_weight in weights] 
-                self_layer.set_weights(updated_weights)
-
-        score += self.model.evaluate(self.x_test, self.y_test)[1]
-        return score
-    
-
-    def update_relationships(self, other):
-        self.relationships[other.bandit_id] = self.relationships.get(other.bandit_id, 0)*np.exp(self.eta*self.utility(other, self.ticket_allocation[other.bandit_id]))
+                    weights[i] *= 1/self.ticket_number
 
     def evaluate(self, x_test, y_test, write_to_history=False, step='train'):
         if write_to_history:
@@ -88,22 +80,12 @@ class Bandit(object):
     def get_communication_history(self):
         return self.communication_history
 
-    # Randomly sample ticket allocation from the weighted relationships
+    # gives one ticket for each peer
     def sample_ticket_allocation(self):
         self.ticket_allocation = {}
-        self.normalize_relationships()
-        self.relationship_history.append(copy.deepcopy(self.relationships))
-        distributed_tickets = 0
-        while distributed_tickets < self.ticket_number:
-            # uses the relationship weights to randomly distribute a ticket to another bandit
-            ticket_rd= rand.random()
-            acc=0
-            for i in self.relationships:
-                acc += self.relationships[i]
-                if ticket_rd < acc:
-                    self.ticket_allocation[i] = self.ticket_allocation.get(i, 0) + 1
-                    distributed_tickets += 1
-                    break
+        for i in self.relationships:
+            self.ticket_allocation[i] = 1
+
         print(f"Node {i} distributed {self.ticket_allocation}")
         self.communication_history.append(copy.deepcopy(self.ticket_allocation))
     

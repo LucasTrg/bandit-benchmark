@@ -1,0 +1,351 @@
+\documentclass{article}
+
+
+\usepackage{PRIMEarxiv}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{lipsum}
+\usepackage{fancyhdr}       % header
+\usepackage{graphicx}       % graphics
+\graphicspath{{media/}}     % organize your images and other figures under media/ folder
+
+%Header
+\pagestyle{fancy}
+\thispagestyle{empty}
+% Update your Headers here
+\rhead{Short Title}
+\lhead{\begin{picture}(0,0) \put(0,0){\includegraphics[width=3.5cm]{logo-igh.png}} \end{picture}}
+
+
+  
+%% Title
+\title{DISCObandit --- Personalized distributed learning through game theory
+%%%% Cite as
+%%%% Update your official citation here when published 
+\thanks{\textit{\underline{Citation}}: 
+\textbf{Lucas Trognon} \textit{DISCOBandit - Personalized Distributed learning through game theory}. Year. MSc Semester Project Report. Intelligent Global Health, EPFL.  } 
+}
+
+\author{
+  Lucas Trognon \\
+  \textit{MSc semester project report} \\
+  July 2023 \\
+  EPFL\\
+  \texttt{lucas.trognon@epfl.ch} \\
+  %% examples of more authors
+   \And
+  Mary-Anne Hartley \& J
+  Hugo El Guedj and  Martin Jaggi
+  \\
+  \textit{Supervision}
+  \\
+  Intelligent Global Health Research Group \\
+  EPFL\\
+  \texttt{mary-anne.hartley@epfl.ch} \\
+  %% \AND
+  %% Coauthor \\
+  %% Affiliation \\
+  %% Address \\
+  %% \texttt{email} \\
+}
+
+
+\begin{document}
+\maketitle
+
+    \begin{center}
+        \includegraphics[width=6cm]{logo-igh.png}
+        \vspace{1cm}
+    \end{center}
+
+\begin{abstract}
+%Try keeping this under 350 words\\
+%No citations in abstract
+    \textbf{BACKGROUND.} 
+    Decentralized learning is a developing field using naive algorithms for aggregation. They are not yet adapted to the complexity of data distributions. To tackle this issue, personalized learning techniques have been developed but they often fail to work in an adversarial setting.
+    As such. we can lean on game theory inspired algorithms to tackle this issue.
+    Whatsmore, the amount of communication required for such techniques is often left unchecked, preventing the solutions to work at scale.\\
+    \textbf{AIM.} To explore scalable game theory approaches to personalized DL and integrate it into a real world platform DISCO.\\
+    \textbf{METHODS/FINDINGS.} DISCO stands for DIStributed COllaborative learning, it is an open-source web-based platform for Federated and Decentralized Learning maintained by the MLO lab. To further enhance DISCO capabilities and to allow for reproducible results, our proposition has been on this platform. \#TODO describe approach and results
+    On top of that, this project triggered a massive refactoring for the whole code base to make it flexible for future experiments.
+    %describe DISCO. describe approach, describe baselines (DITTO)
+    
+    %We tested this of X dataset and found \textit{e.g. Our model reaches 91.2\% (CI95: 89.5---93.2) sensitivity and 80\% (CI95: 74.1---86.5) specificity, outperforming expert assessment by 5\% and 7\% respectively (p<0.05)}.\\
+    \textbf{CONCLUSION.} A sentence or two that summarises the impact of your contribution\\
+\end{abstract}
+
+
+% keywords can be removed
+\keywords{Decentralized Learning \and Personalized Learning \and Adversarialy robust learning}
+
+\newpage
+\section{Background} %(Aim for <1 page)
+\label{sec:background}
+Decentralized learning is a rapidly evolving field that relies on naive algorithms for aggregation, which may not be well-suited to handle the intricacies of complex data distributions. This limitation poses a significant challenge in achieving optimal learning outcomes. To address this issue, various personalized learning techniques have been developed; however, they often struggle to perform effectively in adversarial settings where malicious peers may deliberately provide misleading information.
+
+To overcome these challenges, leveraging game theory-inspired algorithms can be an effective approach. By incorporating principles from game theory, decentralized learning mechanisms can better adapt to the dynamic and competitive nature of the environment. This enables more robust and resilient learning processes, capable of withstanding adversarial attacks and ensuring reliable model convergence.
+
+Furthermore, the scalability of decentralized learning solutions is a critical concern. Many existing techniques suffer from excessive communication requirements, which hinder their practicality when applied at a large scale. However, the DISCOBandit mechanism, based on the multi-armed bandit system, offers a promising solution. By leveraging a preference system and utilizing knowledge from other peers, DISCOBandit allows for specialization in local datasets while enabling efficient graph sparsification.
+
+One of the key advantages of DISCOBandit is its ability to reduce communication costs by maintaining edges only with a subset of trusted peers. Through the bandit framework, the mechanism intelligently selects this subset of peers, balancing the exploration of potentially beneficial connections and the exploitation of the most helpful ones. This hybrid approach ensures personalized learning while promoting effective knowledge sharing and collaboration in a decentralized learning setting.
+
+By integrating elements from game theory and personalized learning techniques, and by leveraging the bandit framework for peer selection, DISCOBandit represents an innovative approach to decentralized learning. Its ability to tackle data complexity, robustness against adversarial scenarios, and reduced communication overhead make it a compelling solution with significant potential for real-world applications in large-scale distributed learning systems.
+
+%to make an argument that you are resolving a NOVEL issue.
+%    Data is not shared for a range of well considered reasons --> problem it fragments the statistical value of the data
+%    SOLUTION: federated learning
+%    PROBLEM: sucks because bottle neck, sovereignty issue (server)
+%    SOLUTION: decentralised
+%    PROBLEM: difficult implement
+%    SOLUTION: DISCO
+%    PROBLEM: no personalization
+%    SOLUTION: exsiting personalization list <-- RELATED WORK
+%    PROBLEM: not fine grained
+%    SOLUTION ME!
+    
+%    --> Existing solution \textit{e.g. Several high accuracy tests exist}
+    
+%    --> Problem with existing solution (e.g. However, the expertise required to interpret these tests is not available in low-resource settings)
+    
+%    --> Your solution in general terms \textit{e.g. therefore there is a need for automated interpretation to better distribute access to TB diagnostics}
+    
+    \newpage
+
+\section{Aim and Objectives} % (Aim for <0.25 pages)
+\label{sec:aim}
+To explore game theory approaches to decentralized personalization 
+    \begin{enumerate}
+        \item \textbf{Objective 1. } To review the literature on personalization + game theory (Section \ref{sec:related}) 
+        \item \textbf{Objective 2. } To adapt DISCO to handle generic range of aggregation strategies (Section \ref{sec:results1})
+        \item \textbf{Objective 3. } To design a novel game-theory approach to aggregation allowing model personalization on peer defined utility (Section \ref{sec:results2})
+        \item \textbf{Objective 4. } To design this in a way minimizing communication costs (Section \ref{sec:results3})
+        \item \textbf{Objective 5. } To allow for this approach to handle some threat models (Section \ref{sec:results4})
+    \end{enumerate}
+     \newpage
+     
+\section{Related work (Aim for 1 page)}
+
+https://arxiv.org/abs/1912.04977 
+\label{sec:related}
+    \subsection{Personalization in Decentralized Learning}
+    Here are some examples of citations
+    \cite{kour2014real,kour2014fast} and see \cite{hadash2018estimate}.
+    
+    The documentation for \verb+natbib+ may be found at
+    \begin{center}
+      \url{http://mirrors.ctan.org/macros/latex/contrib/natbib/natnotes.pdf}
+    \end{center}
+    
+    Of note is the command \verb+\citet+, which produces citations
+    appropriate for use in inline text.  For example,
+    \begin{verbatim}
+       \citet{hasselmo} investigated\dots
+    \end{verbatim}
+    produces
+    \begin{quote}
+      Hasselmo, et al.\ (1995) investigated\dots
+    \end{quote}
+    
+    \begin{center}
+      \url{https://www.ctan.org/pkg/booktabs}
+    \end{center}
+    
+    Here is how you add footnotes. \footnote{Footnotes should be used rarely and to say things that are not relevant enough to be in the main text}
+    
+    \subsection{Adversially robust learning}
+    EXP 4 : Exponential weighting for Exploration and Exploitation with Experts
+    \subsection{Contributions} Summarise your contributions here
+    \begin{itemize}
+        \item Refactoring of the DISCO platform for allowing more complex experiments in the future to be maintainable.
+        \item DISCOBandit, A decentralized aggregation mechanism allowing personalized learning, adversarial robustness and communication cost reduction. 
+        \item Contribution3
+    \end{itemize}
+    
+    \newpage
+    
+\section{Methods (Aim for 1 page)}
+\label{sec:methods}
+    \subsection{Bandit algorithm overview}
+    We propose a novel algorithm that provides graph sparsification, personalization and adversary robustness while keeping privacy preserving capabilities possible.
+    For a given peer that we will refer to as the host, the algorithm is the following : 
+    \begin{enumerate}
+        \item The host keeps a "utility score" for each other peer it is connected to. This utility score is a metric describing how useful each contributions of another peer have been.
+        \item The host then randomly samples distributes discrete "tickets" to its neighbours according to their utility scores. The higher the score, the more tickets a peer will be attributed on average. The total number of tickets to be distributed is defined by each host.
+        \item Each peer that has been attributed at least one ticket will be queried by the host, and will answer with its model.
+        \item The host evaluates the performance of each model on a test dataset, and uses the result to update each score according to the Update Rule \textbf{TODO => formula}
+        \item The host updates its model : 
+        $$w_{i,n+1}=(1-\gamma) w_i,n + \gamma\frac{\sum_{j\neq i} T_j w_{j,n_j}}{\sum_{j\neq i}T_j}$$ 
+        where \begin{itemize}
+            \item $w_{i,n}$ is the model of peer $i$ at step $n$. We denote $w_{j,n_j}$ as the model of peer $j$ as received by $i$. Since aggregations are asynchronous, it may be at a different aggregation round than peer $i$
+            \item $T_j$ is the number of tickets allocated to peer $j$.
+            \item $\gamma \in [0,1]$ is an exploration parameter. It's a hyper parameter allowing the host to choose how much of a proportion of the other models it will aggregate to it's own model. It can be set to dynamically decay, allowing more exploration during the first round possibly increasing convergence speed, to then decay close to 0 to allow fine-tuning to the host's dataset in order to maximize exploitation. 
+        \end{itemize}
+         \item  The host is ready to resume local training, and eventually, trigger another aggregation round
+    \end{enumerate}
+     
+    \begin{figure}[h]
+      \centering
+      \includegraphics[scale=0.2]{Bandit_diagram.png}
+      \caption{DiscoBandit simplified diagram.}
+      \label{fig:modelarch}
+    \end{figure}
+
+    %\subsection{Design choices}
+    \subsection{Ticket allocation}
+    Leads to graph sparsification and allows personalization when paired with the utility score
+    The distribution considered are either multinomial allocation or discretized Dirichlet. One of the nice properties of the Dirichlet distribution is a tuneable rate to graph sparsification as well as another way to balance exploitation/exploration. By tweaking the $\alpha$ parameter of the Dirichlet distribution, a peer with high communication cost can for instance choose $\alpha>1$ and have a uniform mixture of tickets across peers, yielding low graph sparsification but higher exposure to multiple datasets. A lower $\alpha$ will instead cause a very sparse distribution of the tickets, often leading to less exploration and more exploitation, as the node will be mostly exposed to a few nodes it trusts well. TOOD : verify exploration/exploitation claim.
+    
+    
+    \subsection{Utility score}
+    The utility score relies on the multi armed bandit framework TODO : quote and formula.
+    As it has been established before, this setup minimizes regret in the ticket allocation.
+    It also allows each peer to define its own concave utility function that it wants to maximize. Meaning a peer could for instance decide solely to minimize its loss on its dataset, or it could perhaps try to reduce communication cost and the model size it receives for environmental reasons, etc...
+
+    TODO : Bandit framework and update rule
+    Using the EXP4 update rule and denoting $u_i(w_{j,r})$ the utility peer i obtains from using the weights from node j that it obtained during the round r
+    $$P_{i,r}=\frac{exp({\eta \sum_{k=1}^{r-1} u_h((1-\gamma)w_{h, k}+\gamma T_{h,i,k}/T_{tot}w_{i, k})})}{\sum_{j}exp({\eta \sum_{k=1}^{r-1} u_h((1-\gamma)w_{h, k}+\gamma T_{h,j,k}/T_{tot}w_{j, k})})}$$
+    Meaning 
+
+    \begin{equation}
+        P_{i,r+1}=P_{i,r}\times\frac{exp(u((1-\gamma)w_{h, r}+\gamma T_{h,i,n}w_{i, r}))}{\sum_{j}exp({\eta \sum_{k=1}^{r} u_h((1-\gamma)w_{h, k}+\gamma T_{h,j,k}/T_{tot}w_{j, k})})}
+    \end{equation}
+    The above expression allows each node to compute all of the utility scores for an aggregation in $O(n)$ time given $O(n)$ space. Indeed, if for each peer we store the current utility score (which is very necessary for the bandit algorithm), then the divisor of the above expression is simply the sum of the current utility scores and we only need to compute it once per round. It simply remains to compute the numerator that takes O(1) time for each peer combination.
+    \\
+    
+    The only restriction of the utility function $u$ is concavity (for $\eta<0$), as such, it yields a lot of flexibility for the peers. For instance, one could decide to optimize for latency (as an approximation for communication costs), for model sparseness (to reduce it's stored size, communication costs and compute costs), for model distance (a model that is too similar does not provide a lot of information but causes unnecessary communications)
+    
+    
+    \subsection{Data} Describe the dataset, numbers of patients recruited (+where and when), inclusion criteria, features and labels. 
+        Consider adding a table to describe the breakdown of your dataset and labels
+        See Table~\ref{tab:dataset}
+    
+    \begin{table}[h]
+     \caption{Dataset}
+      \centering
+      \begin{tabular}{lll}
+        \toprule
+        \multicolumn{2}{c}{Diagnosis}                   \\
+        \cmidrule(r){1-2}
+        Clinical     & Molecular     & Number of images \\
+        \midrule
+        bla bla     & bla bla   &   $\sim$100     \\
+        bla bla     & bla bla   &   $\sim$10      \\
+        bla bla     & bla bla   &   up to $10^6$  \\
+        \bottomrule
+      \end{tabular}
+      \label{tab:dataset}
+    \end{table}
+    
+    \subsection{Preprocessing pipeline} Consider adding a schematic diagram of the pipeline
+    
+    \subsection{Model architecture} Consider adding a model architecture
+    See Table~\ref{fig:modelarch}
+    
+    \begin{figure}[h]
+      \centering
+      \fbox{\rule[-.5cm]{4cm}{4cm} \rule[-.5cm]{4cm}{0cm}}
+      \caption{Sample figure caption.}
+      \label{fig:modelarch}
+    \end{figure}
+    
+        \subsubsection{Model formalisation}
+            \begin{equation}
+            \xi _{ij}(t)=P(x_{t}=i,x_{t+1}=j|y,v,w;\theta)= {\frac {\alpha _{i}(t)a^{w_t}_{ij}\beta _{j}(t+1)b^{v_{t+1}}_{j}(y_{t+1})}{\sum _{i=1}^{N} \sum _{j=1}^{N} \alpha _{i}(t)a^{w_t}_{ij}\beta _{j}(t+1)b^{v_{t+1}}_{j}(y_{t+1})}}
+            \end{equation}
+        
+        \subsubsection{Hyperparameters}
+            \paragraph{Eta}
+            \paragraph{Gamma}
+            \paragraph{subheadings}
+    \subsection{Experiments}
+        Consider adding subheading for objective-specific methods
+    \newpage
+
+\section{Results (Aim for 3-4 pages)}
+
+
+objective 1 = table comparing personalization strategies 
+https://arxiv.org/abs/2202.02502
+
+
+\label{sec:results}
+        \subsection{Disco Code Refactoring} 
+        \label{sec:results1}
+        DISCO's code was functional but hard to expand. Each new project lead to very adhoc implementation and over rid part of the code while potentialy breaking backward compatibility. For instance, Secure Aggregation which is supposed to be an aggregation mechanism had to have it's own client class for handling peer-to-peer networking, message encoding and decoding.
+        Most of all, it made the cord hard to unravel for new comers, bogging down the effort of master students or possibly other contributors.
+        Or TODO Francesco
+        As such, one of the biggest milestone of the project, was refactoring the code into a structure that was easier to grasp, easier to develop on, on lastly, easier to merge and deploy.
+        We proposed the following :
+        \begin{itemize}
+            \item A universal Client interface that handles making the peer to peer connections, (de)serialization of messages. It is then extended for either Decentralized or Federated architectures.
+            \item An Aggregator Base class responsible for defining aggregation mechanisms generically for both Federated and Decentralized Learning . It defines what messages are sent to the other clients, how aggregation rounds should be orchestrated, who should partake and most importantly, how weights shuld be aggregated. It is extended for each aggregation mechanisms available in DISCO, meaning for the moment : (\textit{Mean Aggregation}, \textit{Secure Aggregation}, \textit{Robust Aggregation}, \textit{Secure Aggregation} and \textit{Bandit Aggregation})
+            
+        \end{itemize}
+        
+
+            %Remember that all of your tables and figures should be almost self-explanatory (without needing to refer too much to the text). Thus please provide X and Y axis titles, legends and a complete caption.
+        \subsection{DISCOBandit} for objective 3 
+        \label{sec:results2}
+        \subsubsection{DISCOBandit Performance} for objective 3
+        
+
+        \subsection{Graph sparsification}
+        An important aspect of our approach is the ability to identify peers that are likely to be of interest to a particular node. This also implies that we can determine the peers that are less likely to provide valuable information. By recognizing this distinction, we can optimize the communication process by choosing not to request models from those less relevant peers. This optimization becomes particularly significant in large decentralized architectures where a node would otherwise have to request models from every other node, resulting in a total of $O(N^2)$ communications. Considering that standard LLM models can weigh up to 10GB, it is evident that such an approach is not scalable.
+
+        To address this scalability challenge, we introduce the ticket system as a motivation. By discretizing the total number of weights that can be allocated for the aggregation phase and modulating the probability distribution of ticket allocation, we can approximate which peers are most likely to be interesting while significantly reducing communication costs to an upper bound of O(TN), where T represents the number of tickets allocated to the node, with T being much smaller than N.
+        
+        In practice, we often observe that we remain below this upper bound due to the non-uniform probability distribution of ticket allocation. The practical gains in efficiency primarily depend on the data distribution among peers and the probability distribution of ticket allocation.
+        
+        Furthermore, the flexibility of our solution shines through the ability to adjust T for each node based on its communication budget or even dynamically in real-time. This adaptability makes the ticket system an exceptionally versatile approach for effectively managing large-scale decentralized architectures. By intelligently selecting peers of interest, minimizing communication overhead, and accommodating varying communication budgets, our mechanism enables efficient and scalable decentralized learning processes.
+        \label{sec:results3}
+        \subsection{Results4} for objective 4 
+        \label{sec:results4}
+        \subsection{DISCOBandit Performance} for objective 4
+        TODO Training speed on IID data (MNIST) against mean agg decentralized
+        TODO Training speed on non-IID Data (MNIST odd vs even for instance) against meanagg decentralized 
+        TODO communication per round vs meanagg
+        TODO 
+
+
+
+
+    \newpage
+
+
+
+
+\section{Discussion (Aim for 1 page)}
+\label{sec:discussion}
+    \subsection{Limitations}
+    
+    \subsection{Future work}
+    Secure aggregation DISCO
+    
+    \subsection{Conclusion}
+
+    \newpage
+    
+    
+\section*{Acknowledgments}
+\begin{itemize}
+    \item Hugo El Guedj for the massive help in refactoring the code base
+    \item Walid Ben Aceur for helping designing a secure aggregation compatible algorithm.
+    
+
+\end{itemize}
+Include all the students engineers who helped you (or on whose work you built your project), the people who collected the data and the patients themselves.
+
+%Bibliography
+\bibliographystyle{unsrt}  
+\bibliography{references}  
+
+\section*{Appendix}
+
+\end{document}

@@ -76,7 +76,7 @@ def split_datasets_by_label(x_train, x_test, y_train, y_test, bandit_number, lab
     return np.array([np.array(x) for  x in x_train_list]) , np.array([np.array(y) for  y in y_train_list]), np.array([np.array(x) for  x in x_test_list]), np.array([np.array(y) for  y in y_test_list])
 
 
-def split_datasets_by_label_fixed(x_train, x_test, y_train, y_test, bandit_number, label_assignment):
+def split_datasets_by_label_fixed(x_train, x_test, y_train, y_test, bandit_number, label_assignment, reduced_validation_set=True):
     x_train_list = []
     y_train_list = []
     x_test_list = []
@@ -120,9 +120,12 @@ def split_datasets_by_label_fixed(x_train, x_test, y_train, y_test, bandit_numbe
             {allocated[label]}""")
             x_train_list[bandit] += x_train_sorted[label][int(allocated[label]*len(x_train_sorted[label])):int((weights[label]+allocated[label])*len(x_train_sorted[label]))]
             y_train_list[bandit] += y_train_sorted[label][int(allocated[label]*len(y_train_sorted[label])):int((weights[label]+allocated[label])*len(y_train_sorted[label]))]
-            x_test_list[bandit] += x_test_sorted[label][int(allocated[label]*len(x_test_sorted[label])):int((weights[label]+allocated[label])*len(x_test_sorted[label]))]
-            y_test_list[bandit] += y_test_sorted[label][int(allocated[label]*len(y_test_sorted[label])):int((weights[label]+allocated[label])*len(y_test_sorted[label]))]
-
+            if reduced_validation_set:
+                x_test_list[bandit] += x_test_sorted[label][int(allocated[label]*len(x_test_sorted[label])):int((weights[label]+allocated[label])*len(x_test_sorted[label]))]
+                y_test_list[bandit] += y_test_sorted[label][int(allocated[label]*len(y_test_sorted[label])):int((weights[label]+allocated[label])*len(y_test_sorted[label]))]
+            else:
+                x_test_list[bandit] += x_test_sorted[label]
+                y_test_list[bandit] += y_test_sorted[label]
             allocated[label] += weights[label]
 
     return np.array([np.array(x) for  x in x_train_list]) , np.array([np.array(y) for  y in y_train_list]), np.array([np.array(x) for  x in x_test_list]), np.array([np.array(y) for  y in y_test_list])

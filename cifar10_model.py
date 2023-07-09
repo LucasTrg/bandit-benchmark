@@ -1,38 +1,13 @@
 import tensorflow as tf
-from tensorflow.keras.models import load_model
-from tensorflow.keras import layers, models, Sequential
+
 class Cifar10_Model(object):
     def __init__(self):
+        self.flat=tf.keras.layers.Flatten(input_shape=(32, 32,3))
 
-        model = Sequential()
-
-        model.add(layers.Conv2D(32, (3,3), padding='same', activation='relu', input_shape=(32,32,3)))
-        model.add(layers.BatchNormalization())
-        model.add(layers.Conv2D(32, (3,3), padding='same', activation='relu'))
-        model.add(layers.BatchNormalization())
-        model.add(layers.MaxPooling2D(pool_size=(2,2)))
-        model.add(layers.Dropout(0.3))
-
-        model.add(layers.Conv2D(64, (3,3), padding='same', activation='relu'))
-        model.add(layers.BatchNormalization())
-        model.add(layers.Conv2D(64, (3,3), padding='same', activation='relu'))
-        model.add(layers.BatchNormalization())
-        model.add(layers.MaxPooling2D(pool_size=(2,2)))
-        model.add(layers.Dropout(0.5))
-
-        model.add(layers.Conv2D(128, (3,3), padding='same', activation='relu'))
-        model.add(layers.BatchNormalization())
-        model.add(layers.Conv2D(128, (3,3), padding='same', activation='relu'))
-        model.add(layers.BatchNormalization())
-        model.add(layers.MaxPooling2D(pool_size=(2,2)))
-        model.add(layers.Dropout(0.5))
-
-        model.add(layers.Flatten())
-        model.add(layers.Dense(128, activation='relu'))
-        model.add(layers.BatchNormalization())
-        model.add(layers.Dropout(0.5))
-        model.add(layers.Dense(10, activation='softmax'))    # num_classes = 10
-
+        self.l1 = tf.keras.layers.Dense(128, activation='relu')
+        self.l2 = tf.keras.layers.Dense(128, activation='relu')
+        self.l3 = tf.keras.layers.Dense(10, activation='softmax')
+        self.model = tf.keras.models.Sequential([self.flat,self.l1, self.l2, self.l3])
         self.model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
     def train(self, x_train, y_train, epochs):
@@ -52,3 +27,4 @@ class Cifar10_Model(object):
 
     def get_layers(self):
         return self.model.layers
+
